@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from .services.chunking_service import write_jsonl
 from .config import DOCUMENTS_PATH
+from .services.chunking_service import write_jsonl
 from .services.indexing_service import IndexingService
 from .services.postgres_store_service import PostgresStoreService
 from .services.vector_store_service import VectorStoreService

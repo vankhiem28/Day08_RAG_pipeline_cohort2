@@ -83,4 +83,3 @@ class LLMService:
         if len(best) > 650:
             return best[:647].rstrip() + "..."
         return best.strip()
-

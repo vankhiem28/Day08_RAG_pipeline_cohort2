@@ -30,4 +30,3 @@ class LoggingService:
         payload = {"timestamp": datetime.now(timezone.utc).isoformat(), **record}
         with path.open("a", encoding="utf-8") as file:
             file.write(json.dumps(payload, ensure_ascii=False) + "\n")
-

@@ -112,4 +112,3 @@ class RetrievalService:
                 "fallback": fallback,
             }
         )
-
