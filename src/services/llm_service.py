@@ -1,11 +1,18 @@
-"""LLM generation with offline extractive fallback."""
+"""LLM generation with Ollama / OpenAI and offline extractive fallback."""
 
 from __future__ import annotations
 
 import os
+import re
 from typing import Any
 
-from ..config import OPENAI_API_KEY, OPENAI_MODEL
+from ..config import (
+    LLM_BACKEND,
+    OLLAMA_BASE_URL,
+    OLLAMA_MODEL,
+    OPENAI_API_KEY,
+    OPENAI_MODEL,
+)
 from .prompt_builder_service import PromptBuilderService
 from .text_utils import sentence_split, tokenize
 
@@ -24,12 +31,59 @@ class LLMService:
         if not chunks:
             return "Không đủ dữ liệu từ nguồn hiện có để trả lời câu hỏi này."
 
-        api_key = OPENAI_API_KEY or os.getenv("OPENAI_API_KEY", "")
-        if api_key:
-            answer = self._try_openai(query, chunks, api_key, temperature, top_p)
+        backend = LLM_BACKEND or "ollama"
+
+        # Try Ollama first if configured
+        if backend == "ollama":
+            answer = self._try_ollama(query, chunks, temperature, top_p)
             if answer:
                 return answer
+
+        # Try OpenAI if configured
+        if backend == "openai" or backend == "ollama":
+            api_key = OPENAI_API_KEY or os.getenv("OPENAI_API_KEY", "")
+            if api_key:
+                answer = self._try_openai(query, chunks, api_key, temperature, top_p)
+                if answer:
+                    return answer
+
         return self._extractive_answer(query, chunks)
+
+    def _try_ollama(
+        self,
+        query: str,
+        chunks: list[dict[str, Any]],
+        temperature: float,
+        top_p: float,
+    ) -> str:
+        """Call Ollama via its OpenAI-compatible /v1 endpoint."""
+        try:
+            from openai import OpenAI
+
+            client = OpenAI(
+                base_url=f"{OLLAMA_BASE_URL}/v1",
+                api_key="ollama",  # Ollama doesn't require a real key
+            )
+            messages = self.prompt_builder.build_messages(query, chunks)
+            # Append /no_think to disable chain-of-thought for cleaner answers
+            if messages and messages[-1]["role"] == "user":
+                messages[-1]["content"] += "\n/no_think"
+
+            response = client.chat.completions.create(
+                model=OLLAMA_MODEL,
+                messages=messages,
+                temperature=temperature,
+                top_p=top_p,
+            )
+            answer = response.choices[0].message.content or ""
+            # Strip any <think>...</think> blocks that may still appear
+            answer = re.sub(r"<think>.*?</think>", "", answer, flags=re.DOTALL).strip()
+            return answer
+        except Exception as e:
+            print(f"[Ollama Error] Failed to generate answer: {e}")
+            import traceback
+            traceback.print_exc()
+            return ""
 
     def _try_openai(
         self,
@@ -50,7 +104,10 @@ class LLMService:
                 top_p=top_p,
             )
             return response.choices[0].message.content or ""
-        except Exception:
+        except Exception as e:
+            print(f"[OpenAI Error] Failed to generate answer: {e}")
+            import traceback
+            traceback.print_exc()
             return ""
 
     def _extractive_answer(self, query: str, chunks: list[dict[str, Any]]) -> str:

@@ -6,8 +6,8 @@ from typing import Any
 
 import streamlit as st
 
+from src.chat_pipeline import generate_chat_response
 from src.services.indexing_service import IndexingService
-from src.task10_generation import generate_with_citation
 
 
 st.set_page_config(
@@ -134,8 +134,8 @@ def render_sources(result: dict[str, Any]) -> None:
             st.write(source.get("content", ""))
 
 
-def ask(question: str, top_k: int) -> dict[str, Any]:
-    return generate_with_citation(question, top_k=top_k)
+def ask(question: str, top_k: int, history: list[dict[str, Any]]) -> dict[str, Any]:
+    return generate_chat_response(question, history=history, top_k=top_k)
 
 
 if "history" not in st.session_state:
@@ -173,7 +173,7 @@ if question:
 
     with st.chat_message("assistant"):
         with st.spinner("Retrieving and generating..."):
-            result = ask(question, top_k=top_k)
+            result = ask(question, top_k=top_k, history=st.session_state.history)
         st.write(result["answer"])
         render_metrics(result)
         render_sources(result)

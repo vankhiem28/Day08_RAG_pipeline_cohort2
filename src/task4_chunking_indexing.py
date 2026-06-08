@@ -29,6 +29,7 @@ Cài đặt:
 from pathlib import Path
 
 from .config import CHUNK_OVERLAP, CHUNK_SIZE, EMBEDDING_DIM, EMBEDDING_MODEL, VECTOR_BACKEND
+from .services.chunking_service import write_jsonl
 from .services.embedding_service import EmbeddingService
 from .services.indexing_service import IndexingService
 from .services.vector_store_service import VectorStoreService
@@ -98,6 +99,8 @@ def index_to_vectorstore(chunks: list[dict], documents: list[dict] | None = None
     """
     Lưu chunks vào vector store đã chọn.
     """
+    if documents is not None:
+        write_jsonl(IndexingService().documents_path, documents)
     VectorStoreService().index_chunks(chunks, documents=documents)
 
 

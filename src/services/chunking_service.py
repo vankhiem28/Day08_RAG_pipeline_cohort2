@@ -180,7 +180,7 @@ def load_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
         return []
     records = []
-    for line in path.read_text(encoding="utf-8").splitlines():
+    for line in path.read_text(encoding="utf-8").split("\n"):
         if line.strip():
             records.append(json.loads(line))
     return records
@@ -188,5 +188,10 @@ def load_jsonl(path: Path) -> list[dict[str, Any]]:
 
 def write_jsonl(path: Path, records: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    text = "\n".join(json.dumps(record, ensure_ascii=False) for record in records)
+    lines = []
+    for record in records:
+        line = json.dumps(record, ensure_ascii=False)
+        line = line.replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
+        lines.append(line)
+    text = "\n".join(lines)
     path.write_text(text + ("\n" if text else ""), encoding="utf-8")

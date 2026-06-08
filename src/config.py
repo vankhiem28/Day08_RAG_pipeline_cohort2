@@ -52,3 +52,10 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 PAGEINDEX_API_KEY = os.getenv("PAGEINDEX_API_KEY", "")
 JINA_API_KEY = os.getenv("JINA_API_KEY", "")
+
+# Ollama (local LLM)
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3:8b")
+
+# LLM backend: "ollama" | "openai"
+LLM_BACKEND = os.getenv("LLM_BACKEND", "ollama")
