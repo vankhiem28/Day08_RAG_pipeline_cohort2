@@ -4,6 +4,119 @@
 
 ---
 
+## Trạng Thái Implementation Hiện Tại
+
+Repo đã được hoàn thiện để chạy end-to-end tối thiểu theo flow:
+
+```
+sample/manual data
+→ markdown standardized data
+→ cleaner + domain-aware chunking
+→ local vector index + BM25 keyword index
+→ hybrid retrieval + vectorless fallback
+→ generation có citation + safety guard + JSONL logging
+```
+
+Các service chính nằm trong `src/services/`:
+- `CleanerService`, `ChunkingService`, `EmbeddingService`
+- `VectorStoreService`, `KeywordSearchService`, `RetrievalService`
+- `PromptBuilderService`, `LLMService`, `CitationService`, `SafetyService`
+- `LoggingService`
+
+Mặc định project chạy offline bằng local JSONL storage:
+- Source/index local: `data/index/documents.jsonl`, `data/index/chunks.jsonl`
+- Logs: `data/logs/retrieval.jsonl`, `data/logs/generation.jsonl`
+- Embedding mặc định: `local-hashing-v1`, có thể đổi sang `sentence-transformers` qua `.env`
+
+PostgreSQL + pgvector cũng đã được setup optional:
+- Bật bằng `RAG_VECTOR_BACKEND=pgvector`
+- PostgreSQL là source of truth cho `documents` và `chunks`
+- `pgvector` là vector search index qua cột `embedding vector(...)`
+- Nếu DB chưa sẵn hoặc thiếu dependency, app tự fallback về JSONL local
+
+### Chạy nhanh
+
+```bash
+# 1. Cài dependency
+pip install -r requirements.txt
+
+# 2. Tạo dữ liệu mẫu legal/news/Q&A
+python3 -m src.sample_data
+
+# 3. Build chunks + local vector index
+python3 -m src.task4_chunking_indexing
+
+# 4. Test retrieval
+python3 -c "from src.task9_retrieval_pipeline import retrieve; print(retrieve('Điều 249 Bộ luật Hình sự', top_k=3))"
+
+# 5. Test generation có citation
+python3 -c "from src.task10_generation import generate_with_citation; print(generate_with_citation('Các hình thức cai nghiện ma túy là gì?')['answer'])"
+
+# 6. Chạy UI Streamlit
+python3 -m streamlit run app.py
+
+# 7. Chạy test suite
+python3 -m pytest tests/test_individual.py -v
+# hoặc nếu chưa cài pytest:
+python3 -m unittest tests.test_individual -v
+```
+
+### Biến môi trường quan trọng
+
+Tạo `.env` từ `.env.example` nếu muốn dùng API thật:
+
+```bash
+cp .env.example .env
+```
+
+- `OPENAI_API_KEY`: nếu có, generation gọi OpenAI; nếu không, dùng extractive fallback có citation.
+- `PAGEINDEX_API_KEY`: nếu có, thử PageIndex; nếu không, dùng local vectorless fallback.
+- `JINA_API_KEY`: nếu có, rerank bằng Jina; nếu không, dùng local lexical rerank.
+- `RAG_EMBEDDING_BACKEND=local`: mặc định offline.
+- `RAG_EMBEDDING_BACKEND=sentence-transformers`: dùng model local nếu đã có/cài được.
+- `RAG_VECTOR_BACKEND=local`: dùng JSONL local.
+- `RAG_VECTOR_BACKEND=pgvector`: dùng PostgreSQL + pgvector.
+
+### PostgreSQL + pgvector
+
+```bash
+# 1. Start PostgreSQL có pgvector extension
+docker compose up -d postgres
+
+# 2. Bật backend pgvector trong .env
+RAG_VECTOR_BACKEND=pgvector
+DATABASE_URL=postgresql://rag:rag@127.0.0.1:5432/rag_lab
+
+# 3. Init schema + index dữ liệu hiện có vào PostgreSQL
+python3 -m src.setup_pgvector
+
+# 4. Chạy retrieval/generation như bình thường
+python3 -c "from src.task9_retrieval_pipeline import retrieve; print(retrieve('Điều 249 Bộ luật Hình sự', top_k=3))"
+python3 -m streamlit run app.py
+```
+
+Database UI:
+
+```bash
+docker compose up -d pgweb
+```
+
+Mở:
+
+```text
+http://127.0.0.1:8081
+```
+
+`pgweb` tự connect vào database `rag_lab`. Có thể browse bảng `documents`, `chunks`, chạy SQL và kiểm tra `embedding vector(256)`.
+
+Schema chính:
+- `documents(document_id, content, metadata, created_at, updated_at)`
+- `chunks(chunk_id, document_id, content, embedding_text, search_text, metadata, embedding vector, created_at, updated_at)`
+- Index keyword: `to_tsvector('simple', search_text)` với `search_text` đã normalize/bỏ dấu cho tiếng Việt
+- Index vector: HNSW cosine nếu pgvector hỗ trợ, fallback IVFFLAT cosine
+
+---
+
 ## Mục Tiêu
 
 Xây dựng một RAG pipeline thực tế, end-to-end, từ thu thập dữ liệu pháp luật và báo chí về ma tuý → xử lý → indexing → retrieval (hybrid + vectorless fallback) → generation có citation.

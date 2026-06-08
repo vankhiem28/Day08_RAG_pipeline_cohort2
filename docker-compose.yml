@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: day08-rag-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-rag_lab}
+      POSTGRES_USER: ${POSTGRES_USER:-rag}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rag}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rag} -d ${POSTGRES_DB:-rag_lab}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgweb:
+    image: sosedoff/pgweb:0.16.2
+    container_name: day08-rag-pgweb
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://rag:rag@postgres:5432/rag_lab?sslmode=disable
+    ports:
+      - "127.0.0.1:8081:8081"
+    command:
+      - /usr/bin/pgweb
+      - --bind=0.0.0.0
+      - --listen=8081
+      - --url=postgres://rag:rag@postgres:5432/rag_lab?sslmode=disable
+
+volumes:
+  postgres_data:
