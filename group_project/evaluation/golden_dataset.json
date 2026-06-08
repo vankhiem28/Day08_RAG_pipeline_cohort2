@@ -1,17 +1,82 @@
 [
   {
-    "question": "Hình phạt cho tội tàng trữ trái phép chất ma tuý theo Điều 249 Bộ luật Hình sự?",
-    "expected_answer": "Phạt tù từ 1 đến 5 năm đối với trường hợp tàng trữ từ 1g đến dưới 5g heroin hoặc cocaine, hoặc chất ma tuý khác với khối lượng tương đương.",
-    "expected_context": "Bộ luật Hình sự 2015, Điều 249"
+    "question": "Luật Phòng, chống ma túy 2021 điều chỉnh những nội dung chính nào?",
+    "expected_answer": "Luật quy định về phòng, chống ma túy; quản lý người sử dụng trái phép chất ma túy; cai nghiện ma túy; trách nhiệm của cá nhân, gia đình, cơ quan, tổ chức; quản lý nhà nước và hợp tác quốc tế về phòng, chống ma túy.",
+    "expected_context": "73luat.md, Điều 1. Phạm vi điều chỉnh"
   },
   {
-    "question": "Luật Phòng chống ma tuý 2021 quy định những hình thức cai nghiện nào?",
-    "expected_answer": "Cai nghiện tự nguyện tại gia đình, cai nghiện tự nguyện tại cộng đồng, cai nghiện tự nguyện tại cơ sở cai nghiện, và cai nghiện bắt buộc tại cơ sở cai nghiện.",
-    "expected_context": "Luật Phòng chống ma tuý 2021, Chương V"
+    "question": "Theo Luật Phòng, chống ma túy 2021, chất ma túy là gì?",
+    "expected_answer": "Chất ma túy là chất gây nghiện, chất hướng thần được quy định trong danh mục chất ma túy do Chính phủ ban hành.",
+    "expected_context": "73luat.md, Điều 2. Giải thích từ ngữ"
   },
   {
-    "question": "Danh mục các chất ma tuý thuộc nhóm I theo quy định pháp luật Việt Nam gồm những chất nào?",
-    "expected_answer": "Nhóm I gồm các chất ma tuý tuyệt đối cấm sử dụng trong y học và đời sống, bao gồm heroin, cocaine, methamphetamine, MDMA (ecstasy), cannabis (cần sa), và các chất tương tự.",
-    "expected_context": "Nghị định 57/2022/NĐ-CP, Phụ lục I"
+    "question": "Luật Phòng, chống ma túy 2021 nêu cây có chứa chất ma túy gồm những cây nào?",
+    "expected_answer": "Cây có chứa chất ma túy là cây thuốc phiện, cây côca, cây cần sa và các loại cây khác có chứa chất ma túy do Chính phủ quy định.",
+    "expected_context": "73luat.md, Điều 2. Giải thích từ ngữ"
+  },
+  {
+    "question": "Các biện pháp cai nghiện ma túy theo Điều 28 Luật Phòng, chống ma túy 2021 là gì?",
+    "expected_answer": "Biện pháp cai nghiện ma túy bao gồm cai nghiện ma túy tự nguyện và cai nghiện ma túy bắt buộc.",
+    "expected_context": "73luat.md, Điều 28. Các biện pháp cai nghiện ma túy"
+  },
+  {
+    "question": "Quy trình cai nghiện ma túy theo Điều 29 gồm những giai đoạn nào?",
+    "expected_answer": "Quy trình gồm tiếp nhận, phân loại; điều trị cắt cơn, giải độc, điều trị rối loạn tâm thần và bệnh lý khác; giáo dục, tư vấn, phục hồi hành vi, nhân cách; lao động trị liệu, học nghề; chuẩn bị tái hòa nhập cộng đồng.",
+    "expected_context": "73luat.md, Điều 29. Quy trình cai nghiện ma túy"
+  },
+  {
+    "question": "Thời hạn cai nghiện ma túy tự nguyện tại gia đình, cộng đồng là bao lâu?",
+    "expected_answer": "Thời hạn cai nghiện ma túy tự nguyện tại gia đình, cộng đồng là từ đủ 06 tháng đến 12 tháng.",
+    "expected_context": "73luat.md, Điều 30. Cai nghiện ma túy tự nguyện tại gia đình, cộng đồng"
+  },
+  {
+    "question": "Thời hạn cai nghiện ma túy tự nguyện tại cơ sở cai nghiện là bao lâu?",
+    "expected_answer": "Thời hạn cai nghiện ma túy tự nguyện tại cơ sở cai nghiện ma túy là từ đủ 06 tháng đến 12 tháng.",
+    "expected_context": "73luat.md, Điều 31. Cai nghiện ma túy tự nguyện tại cơ sở cai nghiện ma túy"
+  },
+  {
+    "question": "Thời hạn cai nghiện ma túy bắt buộc đối với người nghiện từ đủ 12 tuổi trở lên là bao lâu?",
+    "expected_answer": "Thời hạn cai nghiện ma túy bắt buộc đối với người nghiện ma túy từ đủ 12 tuổi trở lên là từ đủ 12 tháng đến 24 tháng.",
+    "expected_context": "73luat.md, Điều 32 và phần thời hạn cai nghiện bắt buộc"
+  },
+  {
+    "question": "Nghị định 28/2026/NĐ-CP ban hành các danh mục chất ma túy và tiền chất nào?",
+    "expected_answer": "Nghị định ban hành Danh mục I, II, III về các chất ma túy và Danh mục IV về các tiền chất; trong đó Danh mục I là các chất ma túy tuyệt đối cấm sử dụng trong y học và đời sống xã hội.",
+    "expected_context": "2026_82_28_2026_NĐ-CP.md, Điều 1"
+  },
+  {
+    "question": "Nghị định 28/2026/NĐ-CP có hiệu lực từ ngày nào và thay thế văn bản nào?",
+    "expected_answer": "Nghị định 28/2026/NĐ-CP có hiệu lực từ ngày 19/01/2026 và làm hết hiệu lực Nghị định 57/2022/NĐ-CP cùng Nghị định 90/2024/NĐ-CP.",
+    "expected_context": "2026_82_28_2026_NĐ-CP.md, Điều 3"
+  },
+  {
+    "question": "Bài báo về Hữu Tín cho biết cơ quan điều tra đề nghị truy tố những ai và về tội gì?",
+    "expected_answer": "Cơ quan điều tra đề nghị truy tố Trần Hữu Tín về tội tổ chức sử dụng trái phép chất ma túy; Nguyễn Hoàng Phi về tội tàng trữ trái phép chất ma túy và tổ chức sử dụng trái phép chất ma túy.",
+    "expected_context": "article_02.md, phần Diễn viên Hữu Tín"
+  },
+  {
+    "question": "Trong vụ Hữu Tín, tang vật ma túy được giám định là gì?",
+    "expected_answer": "Tinh thể màu trắng là Ketamine khối lượng 0,8 gram; 1 viên nén màu hồng và 10 viên nén màu xanh dương là MDMA tổng khối lượng 5 gram.",
+    "expected_context": "article_02.md, kết quả giám định"
+  },
+  {
+    "question": "Bài báo về Châu Việt Cường nêu bị cáo bị xét xử về tội gì và khung hình phạt nào?",
+    "expected_answer": "Châu Việt Cường bị xét xử về tội Giết người theo khoản 2 Điều 123 Bộ luật Hình sự, với khung hình phạt từ 7 đến 15 năm tù.",
+    "expected_context": "article_03.md, phần xét xử Châu Việt Cường"
+  },
+  {
+    "question": "Bài báo về Chi Dân kết luận trách nhiệm của anh em ca sĩ Chi Dân và Võ Thị Kim Tuyến như thế nào?",
+    "expected_answer": "Anh em ca sĩ Chi Dân phải chịu trách nhiệm về hành vi tổ chức sử dụng trái phép chất ma túy; Võ Thị Kim Tuyến bị truy cứu trách nhiệm về hành vi mua bán trái phép 1,6 kg ma túy.",
+    "expected_context": "article_04.md, kết luận vụ Chi Dân"
+  },
+  {
+    "question": "Bài viết về Long Nhật và Sơn Ngọc Minh cho biết hai ca sĩ này bị khởi tố về tội gì?",
+    "expected_answer": "Đinh Long Nhật và Sơn Ngọc Minh đều bị khởi tố, bắt tạm giam về tội tổ chức sử dụng trái phép chất ma túy.",
+    "expected_context": "article_05.md, phần Long Nhật và Sơn Ngọc Minh"
+  },
+  {
+    "question": "Bài viết về Miu Lê ở Cát Hải nêu những chất nào được thu giữ khi khám xét cơ sở lưu trú?",
+    "expected_answer": "Công an thu giữ 5,35 gram Ketamine; 0,40 gram Ketamine và Cocaine; cùng một số dụng cụ, đồ vật liên quan đến hành vi tổ chức sử dụng trái phép chất ma túy.",
+    "expected_context": "article_05.md, phần Miu Lê tại Cát Hải"
   }
 ]

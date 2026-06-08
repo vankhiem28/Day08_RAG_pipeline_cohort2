@@ -9,17 +9,47 @@ Mỗi task được test riêng. Tổng: 50 điểm.
 """
 
 import json
+import importlib.util
 import sys
 import unittest
 from pathlib import Path
 
-# Project root
-PROJECT_DIR = Path(__file__).parent.parent
+# Individual project root
+REPO_DIR = Path(__file__).parent.parent
+PROJECT_DIR = REPO_DIR / "invidual" / "vankhiem"
 DATA_DIR = PROJECT_DIR / "data"
 SRC_DIR = PROJECT_DIR / "src"
 
-# Add src to path
-sys.path.insert(0, str(PROJECT_DIR))
+PACKAGE_NAME = f"_individual_{PROJECT_DIR.name}_src"
+
+
+def import_student_module(module_name):
+    """Import a module from this student's src folder without using root src."""
+    if not SRC_DIR.exists():
+        raise ImportError(f"Student src folder does not exist: {SRC_DIR}")
+
+    if PACKAGE_NAME not in sys.modules:
+        package_spec = importlib.util.spec_from_file_location(
+            PACKAGE_NAME,
+            SRC_DIR / "__init__.py",
+            submodule_search_locations=[str(SRC_DIR)],
+        )
+        package = importlib.util.module_from_spec(package_spec)
+        sys.modules[PACKAGE_NAME] = package
+        package_spec.loader.exec_module(package)
+
+    full_name = f"{PACKAGE_NAME}.{module_name}"
+    if full_name in sys.modules:
+        return sys.modules[full_name]
+
+    module_path = SRC_DIR / f"{module_name}.py"
+    if not module_path.exists():
+        raise ImportError(f"Student module does not exist: {module_path}")
+    spec = importlib.util.spec_from_file_location(full_name, module_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[full_name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 # ===========================================================================
@@ -181,9 +211,11 @@ class TestTask4(unittest.TestCase):
 
     def _import_task4(self):
         try:
-            from src.task4_chunking_indexing import (
-                load_documents, chunk_documents, CHUNK_SIZE, CHUNK_OVERLAP
-            )
+            task4 = import_student_module("task4_chunking_indexing")
+            load_documents = task4.load_documents
+            chunk_documents = task4.chunk_documents
+            CHUNK_SIZE = task4.CHUNK_SIZE
+            CHUNK_OVERLAP = task4.CHUNK_OVERLAP
             return load_documents, chunk_documents, CHUNK_SIZE, CHUNK_OVERLAP
         except (ImportError, NotImplementedError) as e:
             self.skipTest(f"Task 4 chưa implement: {e}")
@@ -247,8 +279,7 @@ class TestTask5(unittest.TestCase):
 
     def _import_task5(self):
         try:
-            from src.task5_semantic_search import semantic_search
-            return semantic_search
+            return import_student_module("task5_semantic_search").semantic_search
         except (ImportError, NotImplementedError) as e:
             self.skipTest(f"Task 5 chưa implement: {e}")
 
@@ -305,8 +336,7 @@ class TestTask6(unittest.TestCase):
 
     def _import_task6(self):
         try:
-            from src.task6_lexical_search import lexical_search
-            return lexical_search
+            return import_student_module("task6_lexical_search").lexical_search
         except (ImportError, NotImplementedError) as e:
             self.skipTest(f"Task 6 chưa implement: {e}")
 
@@ -367,8 +397,7 @@ class TestTask7(unittest.TestCase):
 
     def _import_task7(self):
         try:
-            from src.task7_reranking import rerank
-            return rerank
+            return import_student_module("task7_reranking").rerank
         except (ImportError, NotImplementedError) as e:
             self.skipTest(f"Task 7 chưa implement: {e}")
 
@@ -423,8 +452,7 @@ class TestTask8(unittest.TestCase):
 
     def _import_task8(self):
         try:
-            from src.task8_pageindex_vectorless import pageindex_search
-            return pageindex_search
+            return import_student_module("task8_pageindex_vectorless").pageindex_search
         except (ImportError, NotImplementedError) as e:
             self.skipTest(f"Task 8 chưa implement: {e}")
 
@@ -454,8 +482,7 @@ class TestTask9(unittest.TestCase):
 
     def _import_task9(self):
         try:
-            from src.task9_retrieval_pipeline import retrieve
-            return retrieve
+            return import_student_module("task9_retrieval_pipeline").retrieve
         except (ImportError, NotImplementedError) as e:
             self.skipTest(f"Task 9 chưa implement: {e}")
 
@@ -513,9 +540,10 @@ class TestTask10(unittest.TestCase):
 
     def _import_task10(self):
         try:
-            from src.task10_generation import (
-                generate_with_citation, reorder_for_llm, format_context
-            )
+            task10 = import_student_module("task10_generation")
+            generate_with_citation = task10.generate_with_citation
+            reorder_for_llm = task10.reorder_for_llm
+            format_context = task10.format_context
             return generate_with_citation, reorder_for_llm, format_context
         except (ImportError, NotImplementedError) as e:
             self.skipTest(f"Task 10 chưa implement: {e}")

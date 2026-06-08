@@ -1,0 +1,10 @@
+# Nghệ sĩ A bị xử phạt hành chính trong vụ việc sử dụng chất cấm
+
+**Source:** https://example.com/news/nghe-si-a-bi-xu-phat
+**Crawled:** 2026-06-08T09:03:54.579389+00:00
+
+---
+
+Bài báo mẫu cho biết Nghệ sĩ A bị cơ quan chức năng xử phạt hành chính sau khi có kết quả kiểm tra liên quan đến sử dụng trái phép chất ma túy. Vụ việc được đưa tin như một cảnh báo về trách nhiệm của người nổi tiếng trước công chúng.
+
+Nguồn tin nhấn mạnh cơ quan chức năng không công bố các chi tiết đời tư ngoài phạm vi cần thiết. Bài viết khuyến nghị nghệ sĩ và người quản lý nâng cao nhận thức pháp luật, tránh cổ súy hoặc bình thường hóa hành vi sử dụng chất cấm.
