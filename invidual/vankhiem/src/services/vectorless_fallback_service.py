@@ -49,4 +49,3 @@ class VectorlessFallbackService:
             return results
         except Exception:
             return []
-

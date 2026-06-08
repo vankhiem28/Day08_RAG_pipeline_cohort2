@@ -74,4 +74,3 @@ class EmbeddingService:
         if len(token) <= n:
             return [token]
         return [token[i : i + n] for i in range(len(token) - n + 1)]
-
