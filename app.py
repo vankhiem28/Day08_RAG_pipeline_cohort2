@@ -6,7 +6,7 @@ from typing import Any
 
 import streamlit as st
 
-from invidual.vankhiem.src.services.indexing_service import IndexingService
+from src.services.indexing_service import IndexingService
 from src.task10_generation import generate_with_citation
 
 
